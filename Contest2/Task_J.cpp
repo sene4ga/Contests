@@ -81,9 +81,13 @@ void Decrease(long long i, long long d) {
   Shift(pos);
 }
 
-int main() {
+void Fastios() {
   std::ios_base::sync_with_stdio(false);
   std::cin.tie(nullptr);
+}
+
+int main() {
+  Fastios();
 
   long long n;
   std::cin >> n;
