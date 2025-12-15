@@ -81,6 +81,6 @@ int main() {
 
   std::cout << res.size() << std::endl;
   for (size_t i = 0; i < res.size(); i++) {
-    std::cout << res[i].first << " " << res[i].second << std::endl;
+    std::cout << res[i].first << ' ' << res[i].second << std::endl;
   }
 }
