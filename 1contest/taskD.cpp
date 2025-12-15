@@ -45,6 +45,6 @@ int main() {
   LSD(arr);
 
   for (uint64_t i = 0; i < n; i++) {
-    std::cout << arr[i] << " ";
+    std::cout << arr[i] << ' ';
   }
 }
