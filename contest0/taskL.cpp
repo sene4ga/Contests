@@ -35,17 +35,18 @@ int main() {
   std::getline(std::cin, t2);
   int num = static_cast<int>(std::size(s1));
   std::vector<int> pere(num + 1, 0);
+  int fire;
 
   for (int i = 0; i < num; i++) {
-    int fire;
     std::cin >> fire;
     pere[fire - 1] = i + 1;
   }
 
   int left = 0;
   int right = num + 1;
+  int mid = -1;
   while (right - left > 1) {
-    int mid = left + (right - left) / 2;
+    mid = left + (right - left) / 2;
     if (Func(s1, t2, pere, mid)) {
       left = mid;
     } else {
