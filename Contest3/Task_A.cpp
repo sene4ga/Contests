@@ -8,6 +8,7 @@ void Fastios() {
 }
 
 int main() {
+  Fastios();
   long long n;
   long long q;
   const long long cMax = 2e9;
