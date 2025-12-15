@@ -2,10 +2,13 @@
 #include <iostream>
 #include <vector>
 
-int main() {
+void Fastios() {
   std::ios_base::sync_with_stdio(false);
   std::cin.tie(nullptr);
+}
 
+int main() {
+  Fastios();
   int num;
   const int cLeft = 0;
   const int cMax = 1e9;
@@ -22,14 +25,18 @@ int main() {
   }
 
   int q;
+  int x;
+  int left = -1;
+  int right = -1;
+  int mid = -1;
   std::cin >> q;
+
   for (int i = 0; i < q; ++i) {
-    int x;
-    int left = cLeft;
-    int right = num;
+    left = cLeft;
+    right = num;
     std::cin >> x;
     while (right - left > 1) {
-      int mid = left + (right - left) / 2;
+      mid = left + (right - left) / 2;
       if (diff[mid] > -x) {
         right = mid;
       } else {
