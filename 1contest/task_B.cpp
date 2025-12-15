@@ -6,6 +6,7 @@ long long k;
 const int cX1 = 123;
 const int cX2 = 45;
 const int cOst = 10000000 + 4321;
+const int step = 5;
 
 void BubbleSort(std::vector<long long>& arr) {
   long long size = static_cast<long long>(arr.size());
@@ -20,23 +21,23 @@ void BubbleSort(std::vector<long long>& arr) {
 
 long long Getmed(std::vector<long long>& pi) {
   long long r = static_cast<long long>(pi.size());
-  if (r < 5) {
+  if (r < step) {
     std::vector<long long> temp = pi;
     BubbleSort(temp);
     long long mid_index = (r - 1) / 2;
     return temp[mid_index];
   }
   std::vector<long long> med;
-  std::vector<long long> mini(5);
-  for (long long i = 0; i < r; i += 5) {
-    if (r - i < 5) {
+  std::vector<long long> mini(step);
+  for (long long i = 0; i < r; i += step) {
+    if (r - i < step) {
       long long remaining = r - i;
       std::vector<long long> last_group(pi.begin() + i, pi.end());
       BubbleSort(last_group);
       long long mid_index = (remaining - 1) / 2;
       med.push_back(last_group[mid_index]);
     } else {
-      for (long long j = 0; j < 5; j++) {
+      for (long long j = 0; j < step; j++) {
         mini[j] = pi[i + j];
       }
       BubbleSort(mini);
