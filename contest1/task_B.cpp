@@ -13,8 +13,8 @@ int main() {
   std::vector<long double> pref_mult(cNumbers);
   std::cout << std::fixed << std::setprecision(cComa);
 
+  long double fast;
   for (int ind = 0; ind < cNumbers - 1; ++ind) {
-    long double fast;
     std::cin >> fast;
     array[ind] = std::log2(fast);
   }
@@ -26,9 +26,9 @@ int main() {
   }
 
   std::cin >> questions;
+  int left;
+  int right;
   for (int ind = 0; ind < questions; ++ind) {
-    int left;
-    int right;
     std::cin >> left >> right;
     std::cout << std::pow(2, (pref_mult[right + 1] - pref_mult[left]) /
                              (right - left + 1))
