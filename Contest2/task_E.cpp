@@ -2,8 +2,6 @@
 #include <iostream>
 #include <queue>
 
-long long size = 0;
-long long i = 0;
 std::deque<long long> d;
 std::queue<long long> q;
 
@@ -17,7 +15,6 @@ void Plus(long long x) {
   } else {
     d.push_back(x);
   }
-  size++;
 }
 
 void Multi(long long x) {
@@ -26,7 +23,6 @@ void Multi(long long x) {
   } else {
     d.push_front(x);
   }
-  size++;
 }
 
 void Minus() {
@@ -39,7 +35,6 @@ void Minus() {
     std::cout << q.front() << '\n';
     q.pop();
   }
-  size--;
 }
 
 int main() {
