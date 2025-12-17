@@ -4,7 +4,7 @@
 std::stack<std::pair<long long, long long>> in;
 std::stack<std::pair<long long, long long>> out;
 
-void Put(long long x) {
+void Put(long long x, std::stack<std::pair<long long, long long>>& in, std::stack<std::pair<long long, long long>>& out) {
   std::cout << "ok" << '\n';
   if (in.empty()) {
     in.push({x, x});
@@ -13,7 +13,7 @@ void Put(long long x) {
   in.push({x, std::min(in.top().second, x)});
 }
 
-void Del() {
+void Del(std::stack<std::pair<long long, long long>>& in, std::stack<std::pair<long long, long long>>& out) {
   if (in.empty() && out.empty()) {
     std::cout << "error" << '\n';
     return;
@@ -32,7 +32,7 @@ void Del() {
   out.pop();
 }
 
-void Front() {
+void Front(std::stack<std::pair<long long, long long>>& in, std::stack<std::pair<long long, long long>>& out) {
   if (in.empty() && out.empty()) {
     std::cout << "error" << '\n';
     return;
@@ -50,9 +50,11 @@ void Front() {
   std::cout << out.top().first << '\n';
 }
 
-void Size() { std::cout << static_cast<int>(in.size() + out.size()) << '\n'; }
+void Size(std::stack<std::pair<long long, long long>>& in, std::stack<std::pair<long long, long long>>& out){
+  std::cout << static_cast<int>(in.size() + out.size()) << '\n';
+}
 
-void Cl() {
+void Cl(std::stack<std::pair<long long, long long>>& in, std::stack<std::pair<long long, long long>>& out) {
   std::cout << "ok\n";
   while (!in.empty()) {
     in.pop();
@@ -62,7 +64,7 @@ void Cl() {
   }
 }
 
-void Min() {
+void Min(std::stack<std::pair<long long, long long>>& in, std::stack<std::pair<long long, long long>>& out) {
   if (in.empty() && out.empty()) {
     std::cout << "error" << '\n';
     return;
@@ -78,6 +80,8 @@ void Min() {
 
 int main() {
   long long n;
+  std::stack<std::pair<long long, long long>> in;
+  std::stack<std::pair<long long, long long>> out;
   std::cin >> n;
   std::string f;
   long long time;
@@ -85,17 +89,17 @@ int main() {
     std::cin >> f;
     if (f == "enqueue") {
       std::cin >> time;
-      Put(time);
+      Put(time, in, out);
     } else if (f == "dequeue") {
-      Del();
+      Del(in, out);
     } else if (f == "front") {
-      Front();
+      Front(in, out);
     } else if (f == "size") {
-      Size();
+      Size(in, out);
     } else if (f == "clear") {
-      Cl();
+      Cl(in, out);
     } else {
-      Min();
+      Min(in, out);
     }
   }
 }
