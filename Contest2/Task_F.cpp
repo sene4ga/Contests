@@ -1,9 +1,6 @@
 #include <iostream>
 #include <stack>
 
-std::stack<std::pair<long long, long long>> in;
-std::stack<std::pair<long long, long long>> out;
-
 void Put(long long x, std::stack<std::pair<long long, long long>>& in, std::stack<std::pair<long long, long long>>& out) {
   std::cout << "ok" << '\n';
   if (in.empty()) {
