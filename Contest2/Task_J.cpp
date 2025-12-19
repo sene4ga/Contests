@@ -2,41 +2,42 @@
 #include <string>
 #include <vector>
 
-const long long cMin = -2e9 - 1;
+struct Dann {
+  const long long cMin = -2e9 - 1;
+  std::vector<std::pair<long long, long long>> heap1;
+  std::vector<long long> ind;
+}
 
-std::vector<std::pair<long long, long long>> heap1;
-std::vector<long long> ind;
-
-long long Shift(long long x) {
-  while (x > 1 && heap1[x].first < heap1[x / 2].first) {
-    long long id1 = heap1[x].second;
-    long long id2 = heap1[x / 2].second;
-    std::swap(heap1[x], heap1[x / 2]);
-    std::swap(ind[id1], ind[id2]);
+long long Shift(long long x, Dann& t) {
+  while (x > 1 && t.heap1[x].first < t.heap1[x / 2].first) {
+    long long id1 = t.heap1[x].second;
+    long long id2 = t.heap1[x / 2].second;
+    std::swap(t.heap1[x], t.heap1[x / 2]);
+    std::swap(t.ind[id1], t.ind[id2]);
     x = x / 2;
   }
   return x;
 }
 
-void ShiftDown(long long x) {
-  auto n = static_cast<long long>(heap1.size()) - 1;
+void ShiftDown(long long x, Dann& t) {
+  auto n = static_cast<long long>(t.heap1.size()) - 1;
   while (true) {
     long long left = 2 * x;
     long long right = 2 * x + 1;
     long long smallest = x;
 
-    if (left <= n && heap1[left].first < heap1[smallest].first) {
+    if (left <= n && t.heap1[left].first < t.heap1[smallest].first) {
       smallest = left;
     }
-    if (right <= n && heap1[right].first < heap1[smallest].first) {
+    if (right <= n && t.heap1[right].first < t.heap1[smallest].first) {
       smallest = right;
     }
 
     if (smallest != x) {
-      long long id1 = heap1[x].second;
-      long long id2 = heap1[smallest].second;
-      std::swap(heap1[x], heap1[smallest]);
-      std::swap(ind[id1], ind[id2]);
+      long long id1 = t.heap1[x].second;
+      long long id2 = t.heap1[smallest].second;
+      std::swap(t.heap1[x], t.heap1[smallest]);
+      std::swap(t.ind[id1], t.ind[id2]);
       x = smallest;
     } else {
       break;
@@ -44,40 +45,40 @@ void ShiftDown(long long x) {
   }
 }
 
-void Insert(long long x, long long query_id) {
-  heap1.emplace_back(x, query_id);
-  auto i = static_cast<long long>(heap1.size()) - 1;
-  ind[query_id] = i;
+void Insert(long long x, long long query_id, Dann& t) {
+  t.heap1.emplace_back(x, query_id);
+  auto i = static_cast<long long>(t.heap1.size()) - 1;
+  t.ind[query_id] = i;
   Shift(i);
 }
 
-long long GetMin() { return heap1[1].first; }
+long long GetMin(Dann t) { return t.heap1[1].first; }
 
-void Extract() {
-  long long removed_id = heap1[1].second;
-  ind[removed_id] = -1;
+void Extract(Dann& t) {
+  long long removed_id = t.heap1[1].second;
+  t.ind[removed_id] = -1;
 
-  if (heap1.size() == 2) {
-    heap1.pop_back();
+  if (t.heap1.size() == 2) {
+    t.heap1.pop_back();
     return;
   }
 
-  heap1[1] = heap1.back();
-  ind[heap1[1].second] = 1;
-  heap1.pop_back();
+  t.heap1[1] = t.heap1.back();
+  t.ind[t.heap1[1].second] = 1;
+  t.heap1.pop_back();
 
-  if (heap1.size() > 1) {
+  if (t.heap1.size() > 1) {
     ShiftDown(1);
   }
 }
 
-void Decrease(long long i, long long d) {
-  long long pos = ind[i];
+void Decrease(long long i, long long d, Dann& t) {
+  long long pos = t.ind[i];
   if (pos == -1) {
     return;
   }
 
-  heap1[pos].first -= d;
+  t.heap1[pos].first -= d;
   Shift(pos);
 }
 
@@ -91,9 +92,10 @@ int main() {
 
   long long n;
   std::cin >> n;
+  Dann t;
 
-  ind.resize(n + 2, -1);
-  heap1.emplace_back(cMin, -1);
+  t.ind.resize(n + 2, -1);
+  t.heap1.emplace_back(cMin, -1);
 
   std::string s;
   for (long long query_num = 1; query_num <= n; query_num++) {
@@ -102,16 +104,16 @@ int main() {
     if (s == "insert") {
       long long x;
       std::cin >> x;
-      Insert(x, query_num);
+      Insert(x, query_num, t);
     } else if (s == "getMin") {
-      std::cout << GetMin() << '\n';
+      std::cout << GetMin(t) << '\n';
     } else if (s == "extractMin") {
-      Extract();
+      Extract(t);
     } else if (s == "decreaseKey") {
       long long i;
       long long delta;
       std::cin >> i >> delta;
-      Decrease(i, delta);
+      Decrease(i, delta, t);
     }
   }
   return 0;
