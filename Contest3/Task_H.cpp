@@ -29,8 +29,8 @@ void Build(long long v, long long l, long long r, std::vector<Point>& tree) {
     tree[v] = {0, 0};
   } else {
     long long mid = (l + r) / 2;
-    Build(2 * v, l, mid);
-    Build(2 * v + 1, mid, r);
+    Build(2 * v, l, mid, tree);
+    Build(2 * v + 1, mid, r, tree);
     tree[v] = {0, tree[2 * v].length + tree[2 * v + 1].length};
   }
 }
@@ -45,8 +45,8 @@ void Upd(long long y1t, long long y2t, long long v, long long l, long long r,
     tree[v].count += add;
   } else {
     long long mid = (l + r) / 2;
-    Upd(y1t, y2t, v * 2, l, mid, add);
-    Upd(y1t, y2t, v * 2 + 1, mid, r, add);
+    Upd(y1t, y2t, v * 2, l, mid, add, coords, tree);
+    Upd(y1t, y2t, v * 2 + 1, mid, r, add, coords, tree);
   }
 
   if (tree[v].count > 0) {
@@ -107,7 +107,7 @@ int main() {
   long long interval = n - 1;
 
   tree.resize(4 * n);
-  Build(1, 0, interval);
+  Build(1, 0, interval, tree);
 
   std::sort(events.begin(), events.end(), &Cmp);
 
@@ -115,9 +115,9 @@ int main() {
 
   for (long long i = 0; i < 2 * num; i++) {
     if (i > 0 && events[i].x != events[i - 1].x) {
-      summa += Sum() * (events[i].x - events[i - 1].x);
+      summa += Sum(tree) * (events[i].x - events[i - 1].x);
     }
-    Upd(Get(events[i].y1), Get(events[i].y2), 1, 0, interval, events[i].type);
+    Upd(Get(events[i].y1, coords), Get(events[i].y2, coords), 1, 0, interval, events[i].type);
   }
 
   std::cout << summa;
