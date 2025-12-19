@@ -49,7 +49,7 @@ void Insert(long long x, long long query_id, Dann& t) {
   t.heap1.emplace_back(x, query_id);
   auto i = static_cast<long long>(t.heap1.size()) - 1;
   t.ind[query_id] = i;
-  Shift(i);
+  Shift(i, t);
 }
 
 long long GetMin(Dann t) { return t.heap1[1].first; }
@@ -68,7 +68,7 @@ void Extract(Dann& t) {
   t.heap1.pop_back();
 
   if (t.heap1.size() > 1) {
-    ShiftDown(1);
+    ShiftDown(1, t);
   }
 }
 
@@ -79,7 +79,7 @@ void Decrease(long long i, long long d, Dann& t) {
   }
 
   t.heap1[pos].first -= d;
-  Shift(pos);
+  Shift(pos, t);
 }
 
 void Fastios() {
