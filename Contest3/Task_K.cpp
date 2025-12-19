@@ -2,10 +2,7 @@
 #include <iostream>
 #include <vector>
 
-long long num = 0;
-std::vector<long long> coords;
-
-long long Get(long long x) {
+long long Get(long long x, std::vector<long long>& coords;) {
   return static_cast<long long>(
       (upper_bound(coords.begin(), coords.end(), x) - coords.begin()));
 };
@@ -90,8 +87,11 @@ int main() {
   Fastios();
 
   long long q;
+  long long num = 0;
+  
   std::cin >> num;
   std::vector<std::pair<std::pair<long long, long long>, long long>> otr(num);
+  std::vector<long long> coords;
 
   for (long long i = 0; i < num; i++) {
     std::cin >> otr[i].first.first >> otr[i].first.second >> otr[i].second;
