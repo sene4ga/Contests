@@ -2,11 +2,7 @@
 #include <iostream>
 #include <vector>
 
-long long num = 0;
-long long n = 0;
-std::vector<long long> coords;
-
-long long Get(long long x) {
+long long Get(long long x, std::vector<long long>& coords) {
   return static_cast<long long>(
       (lower_bound(coords.begin(), coords.end(), x) - coords.begin()));
 }
@@ -28,9 +24,7 @@ struct Point {
   long long length;
 };
 
-std::vector<Point> tree;
-
-void Build(long long v, long long l, long long r) {
+void Build(long long v, long long l, long long r, std::vector<Point>& tree) {
   if (r - l == 1) {
     tree[v] = {0, 0};
   } else {
@@ -42,7 +36,7 @@ void Build(long long v, long long l, long long r) {
 }
 
 void Upd(long long y1t, long long y2t, long long v, long long l, long long r,
-         long long add) {
+         long long add, std::vector<long long>& coords, std::vector<Point>& tree) {
   if (r <= y1t || l >= y2t) {
     return;
   }
@@ -66,7 +60,7 @@ void Upd(long long y1t, long long y2t, long long v, long long l, long long r,
   }
 }
 
-long long Sum() { return tree[1].length; }
+long long Sum(std::vector<Point>& tree) { return tree[1].length; }
 
 bool Cmp(Event a, Event b) { return a < b; }
 
@@ -77,25 +71,29 @@ void Fastios() {
 
 int main() {
   Fastios();
+  std::vector<Point> tree;
+  long long num = 0;
+  long long n = 0;
+  std::vector<long long> coords;
   std::cin >> num;
   std::vector<Event> events(2 * num);
 
-  long long a;
-  long long b;
-  long long c;
-  long long d;
+  long long x1;
+  long long y1;
+  long long x2;
+  long long y2;
   for (long long i = 0; i < num; i++) {
     std::cin >> a >> b >> c >> d;
-    if (c < a) {
-      std::swap(a, c);
+    if (x2 < x1) {
+      std::swap(x1, x2);
     }
-    if (d < b) {
-      std::swap(b, d);
+    if (y2 < y1) {
+      std::swap(y1, y2);
     }
-    events[i] = {a, b, d, 1};
-    events[num + i] = {c, b, d, -1};
-    coords.push_back(b);
-    coords.push_back(d);
+    events[i] = {x1, y1, y2, 1};
+    events[num + i] = {x2, y1, y2, -1};
+    coords.push_back(y1);
+    coords.push_back(y2);
   }
 
   sort(coords.begin(), coords.end());
