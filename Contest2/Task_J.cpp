@@ -95,7 +95,7 @@ int main() {
   Dann t;
 
   t.ind.resize(n + 2, -1);
-  t.heap1.emplace_back(cMin, -1);
+  t.heap1.emplace_back(t.cMin, -1);
 
   std::string s;
   for (long long query_num = 1; query_num <= n; query_num++) {
