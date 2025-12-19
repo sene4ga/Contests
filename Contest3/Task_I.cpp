@@ -2,12 +2,7 @@
 #include <iostream>
 #include <vector>
 
-int n;
-int size;
-
-std::vector<std::vector<int>> tree;
-
-void Build(std::vector<int>& v) {
+void Build(std::vector<int>& v, int& size, std::vector<std::vector<int>>& tree) {
   int s = static_cast<int>(v.size());
   size = 1;
   while (size < s) {
@@ -46,7 +41,7 @@ void Build(std::vector<int>& v) {
   }
 }
 
-int Binsearchmin(int v, int y) {
+int Binsearchmin(int v, int y, std::vector<std::vector<int>>& tree) {
   int l = -1;
   int r = static_cast<int>(tree[v].size());
 
@@ -61,7 +56,7 @@ int Binsearchmin(int v, int y) {
   return l + 1;
 }
 
-int Countmin(int v, int l, int r, int y, int ld, int rd) {
+int Countmin(int v, int l, int r, int y, int ld, int rd, std::vector<std::vector<int>>& tree) {
   if (ld > r || rd < l) {
     return 0;
   }
@@ -79,7 +74,7 @@ int Countmin(int v, int l, int r, int y, int ld, int rd) {
          Countmin(v * 2 + 1, l, r, y, mid + 1, rd);
 }
 
-int Count(int l, int r, int x, int y) {
+int Count(int l, int r, int x, int y, int size) {
   return Countmin(1, l, r, y, 0, size - 1) -
          Countmin(1, l, r, x - 1, 0, size - 1);
 }
@@ -93,6 +88,9 @@ int main() {
   Fastios();
 
   int q;
+  int n;
+  int size;
+  std::vector<std::vector<int>> tree;
   std::cin >> n >> q;
   std::vector<int> otr(n);
 
@@ -100,7 +98,7 @@ int main() {
     std::cin >> otr[i];
   }
 
-  Build(otr);
+  Build(otr, size, tree);
   int l;
   int r;
   int x;
@@ -109,6 +107,6 @@ int main() {
     std::cin >> l >> r >> x >> y;
     l--;
     r--;
-    std::cout << Count(l, r, x, y) << '\n';
+    std::cout << Count(l, r, x, y, size, tree) << '\n';
   }
 }
