@@ -11,7 +11,6 @@ struct Node {
 };
 
 std::vector<Node> tree;
-int root = -1;
 
 void Updsz(int v) {
   if (v == -1) {
@@ -26,7 +25,7 @@ void Updsz(int v) {
   }
 }
 
-void Rotr(int y) {
+void Rotr(int y, int root) {
   int x = tree[y].left;
   if (x == -1) {
     return;
@@ -55,7 +54,7 @@ void Rotr(int y) {
   Updsz(x);
 }
 
-void Rotl(int x) {
+void Rotl(int x, int root) {
   int y = tree[x].right;
   if (y == -1) {
     return;
@@ -86,7 +85,7 @@ void Rotl(int x) {
   Updsz(y);
 }
 
-int Splay(int v) {
+int Splay(int v, int root) {
   if (v == -1) {
     return -1;
   }
@@ -97,37 +96,37 @@ int Splay(int v) {
 
     if (g == -1) {
       if (tree[p].left == v) {
-        Rotr(p);
+        Rotr(p, root);
       } else {
-        Rotl(p);
+        Rotl(p, root);
       }
     } else {
       if (tree[p].left == v && tree[g].left == p) {
-        Rotr(g);
-        Rotr(p);
+        Rotr(g, root);
+        Rotr(p, root);
       } else if (tree[p].right == v && tree[g].right == p) {
-        Rotl(g);
-        Rotl(p);
+        Rotl(g, root);
+        Rotl(p, root);
       } else if (tree[p].left == v && tree[g].right == p) {
-        Rotr(p);
-        Rotl(g);
+        Rotr(p, root);
+        Rotl(g, root);
       } else {
-        Rotl(p);
-        Rotr(g);
+        Rotl(p, root);
+        Rotr(g, root);
       }
     }
   }
   return v;
 }
 
-int Find(int v, int val) {
+int Find(int v, int val, int root) {
   int cur = v;
   int last = -1;
 
   while (cur != -1) {
     last = cur;
     if (tree[cur].x == val) {
-      return Splay(cur);
+      return Splay(cur, root);
     }
     if (val < tree[cur].x) {
       cur = tree[cur].left;
@@ -137,12 +136,12 @@ int Find(int v, int val) {
   }
 
   if (last != -1) {
-    root = Splay(last);
+    root = Splay(last, root);
   }
   return root;
 }
 
-int Insert(int v, int val) {
+int Insert(int v, int val, int root) {
   if (v == -1) {
     tree.push_back({val, -1, 1, -1, -1});
     root = static_cast<int>(tree.size()) - 1;
@@ -154,7 +153,7 @@ int Insert(int v, int val) {
   while (cur != -1) {
     par = cur;
     if (tree[cur].x == val) {
-      root = Splay(cur);
+      root = Splay(cur, root);
       return root;
     }
     if (val < tree[cur].x) {
@@ -174,15 +173,15 @@ int Insert(int v, int val) {
     }
     Updsz(par);
   }
-  return Splay(new_n);
+  return Splay(new_n, root);
 }
 
-int Delete(int val) {
+int Delete(int val, int root) {
   if (root == -1) {
     return -1;
   }
 
-  root = Find(root, val);
+  root = Find(root, val, root);
 
   if (tree[root].x != val) {
     return root;
@@ -208,7 +207,7 @@ int Delete(int val) {
       max_left = tree[max_left].right;
     }
 
-    root = Splay(max_left);
+    root = Splay(max_left, root);
 
     tree[root].right = r;
     tree[r].par = root;
@@ -218,20 +217,20 @@ int Delete(int val) {
   return root;
 }
 
-bool Exists(int val) {
+bool Exists(int val, int root) {
   if (root == -1) {
     return false;
   }
-  root = Find(root, val);
+  root = Find(root, val, root);
   return (root != -1 && tree[root].x == val);
 }
 
-int Next(int val) {
+int Next(int val, int root) {
   if (root == -1) {
     return -1;
   }
 
-  root = Find(root, val);
+  root = Find(root, val, root);
 
   if (tree[root].x > val) {
     return tree[root].x;
@@ -248,12 +247,12 @@ int Next(int val) {
   return tree[cur].x;
 }
 
-int Prev(int val) {
+int Prev(int val, int root) {
   if (root == -1) {
     return -1;
   }
 
-  root = Find(root, val);
+  root = Find(root, val, root);
 
   if (tree[root].x < val) {
     return tree[root].x;
@@ -270,7 +269,7 @@ int Prev(int val) {
   return tree[cur].x;
 }
 
-int Kth(int v, int k) {
+int Kth(int v, int k, int root) {
   if (v == -1) {
     return -1;
   }
@@ -278,57 +277,58 @@ int Kth(int v, int k) {
   int left_size = (tree[v].left != -1) ? tree[tree[v].left].sz : 0;
 
   if (k < left_size) {
-    return Kth(tree[v].left, k);
+    return Kth(tree[v].left, k, root);
   }
   if (k == left_size) {
-    root = Splay(v);
+    root = Splay(v, root);
     return tree[v].x;
   }
-  return Kth(tree[v].right, k - left_size - 1);
+  return Kth(tree[v].right, k - left_size - 1, root);
 }
 
 int main() {
   std::string command;
+  int root = -1;
   int x;
 
   while (std::cin >> command >> x) {
     if (command == "insert") {
-      if (!Exists(x)) {
-        root = Insert(root, x);
+      if (!Exists(x, root)) {
+        root = Insert(root, x, root);
       }
     } else if (command == "delete") {
-      if (Exists(x)) {
-        root = Delete(x);
+      if (Exists(x, root)) {
+        root = Delete(x, root);
       }
     } else if (command == "exists") {
-      if (Exists(x)) {
-        std::cout << "true\n";
+      if (Exists(x, root)) {
+        std::cout << "true" << '\n';
       } else {
-        std::cout << "false\n";
+        std::cout << "false" << '\n';
       }
     } else if (command == "next") {
-      int res = Next(x);
+      int res = Next(x, root);
       if (res == -1) {
-        std::cout << "none\n";
+        std::cout << "none" << '\n';
       } else {
-        std::cout << res << "\n";
+        std::cout << res << '\n';
       }
     } else if (command == "prev") {
-      int res = Prev(x);
+      int res = Prev(x, root);
       if (res == -1) {
-        std::cout << "none\n";
+        std::cout << "none" << '\n';
       } else {
-        std::cout << res << "\n";
+        std::cout << res << '\n';
       }
     } else if (command == "kth") {
       if (root == -1 || x < 0 || x >= tree[root].sz) {
-        std::cout << "none\n";
+        std::cout << "none" << '\n';
       } else {
-        int res = Kth(root, x);
+        int res = Kth(root, x, root);
         if (res == -1) {
-          std::cout << "none\n";
+          std::cout << "none" << '\n';
         } else {
-          std::cout << res << "\n";
+          std::cout << res << '\n';
         }
       }
     }
