@@ -64,7 +64,7 @@ void Solve() {
     std::cout << "YES" << std::endl;
     std::cout << cycle.size() << std::endl;
     for (size_t i = 0; i < cycle.size(); ++i) {
-      std::cout << cycle[i] + 1 << (i == cycle.size() - 1 ? "" : " ");
+      std::cout << cycle[i] + 1 << (i == cycle.size() - 1 ? "" : ' ');
     }
     std::cout << std::endl;
   }
