@@ -3,15 +3,9 @@
 #include <map>
 #include <vector>
 
-std::vector<std::vector<std::pair<int, int>>> g;
-std::vector<int> tin;
-std::vector<int> low;
-std::vector<bool> visited;
-std::vector<bool> is_bridge;
-std::vector<int> mult;
-int timer;
-
-void Dfs(int v, int parid) {
+void Dfs(int v, int parid, std::vector<std::vector<std::pair<int, int>>>& g,
+         std::vector<int>& tin, std::vector<int>& low, std::vector<bool>& visited,
+         std::vector<bool>& is_bridge, std::vector<int>& mult, int& timer;) {
   visited[v] = true;
   tin[v] = timer++;
   low[v] = timer;
@@ -24,7 +18,7 @@ void Dfs(int v, int parid) {
     if (visited[to]) {
       low[v] = std::min(low[v], tin[to]);
     } else {
-      Dfs(to, id);
+      Dfs(to, id, g, tin, low, visited, is_bridge, mult, timer);
       low[v] = std::min(low[v], low[to]);
       if (low[to] > tin[v] && mult[id] == 1) {
         is_bridge[id] = true;
@@ -36,6 +30,13 @@ void Dfs(int v, int parid) {
 int main() {
   int n;
   int m;
+  std::vector<std::vector<std::pair<int, int>>> g;
+  std::vector<int> tin;
+  std::vector<int> low;
+  std::vector<bool> visited;
+  std::vector<bool> is_bridge;
+  std::vector<int> mult;
+  int timer;
   std::cin >> n >> m;
   g.resize(n + 1);
   std::vector<int> u(m);
@@ -74,7 +75,7 @@ int main() {
   timer = 0;
   for (int v = 1; v <= n; ++v) {
     if (!visited[v]) {
-      Dfs(v, -1);
+      Dfs(v, -1, g, tin, low, visited, is_bridge, mult, timer);
     }
   }
 
@@ -87,7 +88,7 @@ int main() {
   std::cout << cnt << std::endl;
   for (int i = 0; i < m; ++i) {
     if (is_bridge[i]) {
-      std::cout << i + 1 << "\n";
+      std::cout << i + 1 << '\n';
     }
   }
 }
