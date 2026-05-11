@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 
-const int cInf = 100000;
+const int cInf = 1e5;
 
 void Solve() {
   int n;
