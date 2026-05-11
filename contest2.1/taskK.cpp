@@ -48,7 +48,7 @@ int main() {
 
   std::reverse(ans.begin(), ans.end());
 
-  std::cout << len << "\n";
+  std::cout << len << '\n';
   for (long long i : ans) {
     std::cout << i + 1 << " ";
   }
