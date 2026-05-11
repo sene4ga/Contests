@@ -19,5 +19,5 @@ int main() {
       ans += dp[n - a];
     }
   }
-  std::cout << ans << "\n";
+  std::cout << ans << '\n';
 }
