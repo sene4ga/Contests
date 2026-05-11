@@ -2,9 +2,13 @@
 #include <stack>
 #include <vector>
 
-int main() {
+void Fastio() {
   std::ios::sync_with_stdio(false);
   std::cin.tie(nullptr);
+}
+
+int main() {
+  Fastio();
 
   int n;
   int m;
